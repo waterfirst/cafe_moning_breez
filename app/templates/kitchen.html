@@ -37,6 +37,9 @@
     border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:14px;display:none;}
   .toolbar{display:flex;gap:8px;align-items:center;}
   .toolbar a{font-size:13px;color:#2563eb;text-decoration:none;}
+  .sound-btn{width:auto;background:#18181b;border-radius:999px;padding:8px 12px;
+    font-size:13px;white-space:nowrap;}
+  .sound-btn.on{background:#16a34a;}
   .dot-live{width:8px;height:8px;border-radius:50%;background:#22c55e;
     display:inline-block;animation:blink 1.4s infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
@@ -49,6 +52,7 @@
       <div class="toolbar">
         <span class="dot-live"></span>
         <span id="sub">불러오는 중…</span>
+        <button class="sound-btn" id="soundBtn" type="button">🔔 벨 켜기</button>
         <a id="dash" href="#">📊 대시보드</a>
       </div>
     </div>
@@ -65,6 +69,48 @@
 <script>
 const TOKEN = new URLSearchParams(location.search).get("token") || "";
 document.getElementById("dash").href = "/dashboard?token=" + encodeURIComponent(TOKEN);
+let knownWaiting = new Set();
+let firstLoad = true;
+let audioCtx = null;
+let soundReady = false;
+
+function initSound(){
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if(!AudioContext) return;
+  audioCtx = audioCtx || new AudioContext();
+  audioCtx.resume();
+  soundReady = true;
+  const btn = document.getElementById("soundBtn");
+  btn.textContent = "🔔 벨 켜짐";
+  btn.classList.add("on");
+}
+
+function tone(freq, start, duration, gainValue){
+  if(!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
+  gain.gain.setValueAtTime(0.001, audioCtx.currentTime + start);
+  gain.gain.exponentialRampToValueAtTime(gainValue, audioCtx.currentTime + start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(audioCtx.currentTime + start);
+  osc.stop(audioCtx.currentTime + start + duration + 0.03);
+}
+
+function playDingDong(){
+  if(!soundReady || !audioCtx) return;
+  audioCtx.resume();
+  tone(880, 0, .18, .18);
+  tone(660, .2, .28, .16);
+}
+
+document.getElementById("soundBtn").addEventListener("click", () => {
+  initSound();
+  playDingDong();
+});
 
 function showErr(msg){
   const e = document.getElementById("err");
@@ -101,6 +147,8 @@ async function load(){
     const board = await (await fetch("/api/orders")).json();
     const waiting = board.filter(o=>o.status==="waiting").sort((a,b)=>a.order_no-b.order_no);
     const done    = board.filter(o=>o.status==="done").sort((a,b)=>a.order_no-b.order_no);
+    const nextWaiting = new Set(waiting.map(o=>o.order_no));
+    const hasNewOrder = waiting.some(o=>!knownWaiting.has(o.order_no));
 
     document.getElementById("cnt_w").textContent = waiting.length;
     document.getElementById("cnt_d").textContent = done.length;
@@ -113,6 +161,9 @@ async function load(){
     document.getElementById("sub").textContent =
       `자동 갱신 · ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
     document.getElementById("err").style.display = "none";
+    if(!firstLoad && hasNewOrder) playDingDong();
+    knownWaiting = nextWaiting;
+    firstLoad = false;
   }catch(e){
     showErr("주문 목록을 불러오지 못했습니다");
   }
