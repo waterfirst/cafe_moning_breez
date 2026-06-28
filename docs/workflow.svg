@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1480" viewBox="0 0 1280 1480" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf7f1"/>
+      <stop offset="1" stop-color="#f3ece1"/>
+    </linearGradient>
+    <linearGradient id="cust" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8d6e52"/>
+      <stop offset="1" stop-color="#6f5239"/>
+    </linearGradient>
+    <linearGradient id="sys" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f7cac"/>
+      <stop offset="1" stop-color="#2e5d83"/>
+    </linearGradient>
+    <linearGradient id="kit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c97b3c"/>
+      <stop offset="1" stop-color="#a85e26"/>
+    </linearGradient>
+    <linearGradient id="ana" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4f9d69"/>
+      <stop offset="1" stop-color="#3a7a4f"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7a6a55"/>
+    </marker>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3f7cac"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="1480" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="640" y="62" text-anchor="middle" font-size="38" font-weight="800" fill="#4a3526">☕ 카페 주문 처리 전체 흐름도</text>
+  <text x="640" y="96" text-anchor="middle" font-size="18" fill="#8a7a66">QR 주문 · 텔레그램/주방 전송 · 모니터 표시 · 결제/수령 · 매출 분석</text>
+
+  <!-- Legend -->
+  <g font-size="14" fill="#5a4a3a">
+    <rect x="300" y="118" width="16" height="16" rx="3" fill="url(#cust)"/><text x="322" y="131">고객</text>
+    <rect x="392" y="118" width="16" height="16" rx="3" fill="url(#sys)"/><text x="414" y="131">시스템/알림</text>
+    <rect x="520" y="118" width="16" height="16" rx="3" fill="url(#kit)"/><text x="542" y="131">주방/바리스타</text>
+    <rect x="672" y="118" width="16" height="16" rx="3" fill="url(#ana)"/><text x="694" y="131">분석/기록</text>
+  </g>
+
+  <!-- nodes: helper layout -->
+  <!-- Step 1 -->
+  <g filter="url(#sh)">
+    <rect x="490" y="160" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="195" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">① 고객이 테이블에 착석</text>
+  <text x="640" y="219" text-anchor="middle" font-size="14" fill="#f2e7da">테이블별 좌석 안내</text>
+
+  <!-- Step 2 -->
+  <g filter="url(#sh)">
+    <rect x="490" y="266" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="301" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">② QR 코드 스캔</text>
+  <text x="640" y="325" text-anchor="middle" font-size="14" fill="#f2e7da">테이블의 QR로 접속</text>
+
+  <!-- Step 3 -->
+  <g filter="url(#sh)">
+    <rect x="490" y="372" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="407" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">③ 주문 웹페이지 접속</text>
+  <text x="640" y="431" text-anchor="middle" font-size="14" fill="#f2e7da">메뉴 선택 화면</text>
+
+  <!-- Step 4 -->
+  <g filter="url(#sh)">
+    <rect x="490" y="478" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="513" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">④ 커피 주문</text>
+  <text x="640" y="537" text-anchor="middle" font-size="14" fill="#f2e7da">메뉴 · 수량 · 옵션 선택</text>
+
+  <!-- Split: Telegram + Bar (parallel) -->
+  <!-- Step 5a Telegram -->
+  <g filter="url(#sh)">
+    <rect x="190" y="600" width="280" height="74" rx="16" fill="url(#sys)"/>
+  </g>
+  <text x="330" y="630" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">⑤ 텔레그램 전송</text>
+  <text x="330" y="654" text-anchor="middle" font-size="14" fill="#e3eef6">주문내역 실시간 알림</text>
+
+  <!-- Step 5b Bar -->
+  <g filter="url(#sh)">
+    <rect x="810" y="600" width="280" height="74" rx="16" fill="url(#kit)"/>
+  </g>
+  <text x="950" y="630" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">⑤ 주방(바) 전송</text>
+  <text x="950" y="654" text-anchor="middle" font-size="14" fill="#fbe9d8">주방 태블릿에 주문 접수</text>
+
+  <!-- parallel label -->
+  <text x="640" y="585" text-anchor="middle" font-size="14" font-style="italic" fill="#9a7d5f">↑ 주문 동시 전송 (병렬)</text>
+
+  <!-- Step 6 accept -->
+  <g filter="url(#sh)">
+    <rect x="810" y="710" width="280" height="74" rx="16" fill="url(#kit)"/>
+  </g>
+  <text x="950" y="740" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">⑥ 접수 버튼 클릭</text>
+  <text x="950" y="764" text-anchor="middle" font-size="14" fill="#fbe9d8">모니터에 주문번호 표시</text>
+
+  <!-- Monitor (display) - side node -->
+  <g filter="url(#sh)">
+    <rect x="500" y="710" width="240" height="74" rx="16" fill="url(#sys)"/>
+  </g>
+  <text x="620" y="740" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">📺 주문 모니터</text>
+  <text x="620" y="764" text-anchor="middle" font-size="13" fill="#e3eef6">접수 영역에 번호 표시</text>
+
+  <!-- Step 7 make -->
+  <g filter="url(#sh)">
+    <rect x="810" y="820" width="280" height="74" rx="16" fill="url(#kit)"/>
+  </g>
+  <text x="950" y="850" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">⑦ 커피 제조</text>
+  <text x="950" y="874" text-anchor="middle" font-size="14" fill="#fbe9d8">바리스타 음료 제조</text>
+
+  <!-- Step 8 complete -->
+  <g filter="url(#sh)">
+    <rect x="810" y="930" width="280" height="74" rx="16" fill="url(#kit)"/>
+  </g>
+  <text x="950" y="960" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">⑧ 완료 버튼 클릭</text>
+  <text x="950" y="984" text-anchor="middle" font-size="14" fill="#fbe9d8">번호가 완료 영역으로 이동</text>
+
+  <!-- Monitor complete -->
+  <g filter="url(#sh)">
+    <rect x="500" y="930" width="240" height="74" rx="16" fill="url(#sys)"/>
+  </g>
+  <text x="620" y="960" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">📺 주문 모니터</text>
+  <text x="620" y="984" text-anchor="middle" font-size="13" fill="#e3eef6">완료 영역으로 이동</text>
+
+  <!-- Step 9 customer to counter -->
+  <g filter="url(#sh)">
+    <rect x="490" y="1040" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="1070" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">⑨ 고객 카운터 이동</text>
+  <text x="640" y="1094" text-anchor="middle" font-size="14" fill="#f2e7da">완료번호 확인 후 이동</text>
+
+  <!-- Step 10 pay + pickup -->
+  <g filter="url(#sh)">
+    <rect x="490" y="1146" width="300" height="74" rx="16" fill="url(#cust)"/>
+  </g>
+  <text x="640" y="1176" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">⑩ 결제 및 커피 수령</text>
+  <text x="640" y="1200" text-anchor="middle" font-size="14" fill="#f2e7da">카운터에서 결제 후 픽업</text>
+
+  <!-- Step 11 analytics -->
+  <g filter="url(#sh)">
+    <rect x="490" y="1252" width="300" height="84" rx="16" fill="url(#ana)"/>
+  </g>
+  <text x="640" y="1286" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">⑪ 커피 분석 프로그램 기록</text>
+  <text x="640" y="1310" text-anchor="middle" font-size="14" fill="#e3f1e8">매출 · 메뉴 · 시간대 · 날씨 분석</text>
+
+  <!-- ===== EDGES ===== -->
+  <g fill="none" stroke="#7a6a55" stroke-width="2.5">
+    <path d="M640,234 L640,264" marker-end="url(#arrow)"/>
+    <path d="M640,340 L640,370" marker-end="url(#arrow)"/>
+    <path d="M640,446 L640,476" marker-end="url(#arrow)"/>
+  </g>
+  <!-- split to telegram and bar -->
+  <g fill="none" stroke="#3f7cac" stroke-width="2.5">
+    <path d="M540,552 C420,575 360,575 330,598" marker-end="url(#arrowB)"/>
+  </g>
+  <g fill="none" stroke="#c97b3c" stroke-width="2.5">
+    <path d="M740,552 C860,575 920,575 950,598" marker-end="url(#arrow)"/>
+  </g>
+  <!-- bar -> accept -->
+  <g fill="none" stroke="#c97b3c" stroke-width="2.5">
+    <path d="M950,674 L950,708" marker-end="url(#arrow)"/>
+    <path d="M950,784 L950,818" marker-end="url(#arrow)"/>
+    <path d="M950,894 L950,928" marker-end="url(#arrow)"/>
+  </g>
+  <!-- accept -> monitor, complete -> monitor -->
+  <g fill="none" stroke="#3f7cac" stroke-width="2.2" stroke-dasharray="6 5">
+    <path d="M808,747 L742,747" marker-end="url(#arrowB)"/>
+    <path d="M808,967 L742,967" marker-end="url(#arrowB)"/>
+  </g>
+  <!-- complete -> customer counter -->
+  <g fill="none" stroke="#7a6a55" stroke-width="2.5">
+    <path d="M808,990 C760,1015 720,1018 690,1038" marker-end="url(#arrow)"/>
+    <path d="M640,1114 L640,1144" marker-end="url(#arrow)"/>
+    <path d="M640,1220 L640,1250" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- footer -->
+  <text x="640" y="1372" text-anchor="middle" font-size="13" fill="#9a8a76">cafe-os · QR 주문 · 주문 모니터링 · 주방 처리 · 매출 분석 시스템</text>
+</svg>
