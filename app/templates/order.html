@@ -4,9 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>카페 주문</title>
-<style>
-:root{--ink:#17130f;--muted:#6f675e;--line:#e4ddd4;--gold:#f4c978;--green:#0f7a4a;--dark:#15110d;--paper:#fffaf1}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Pretendard","Malgun Gothic",Arial,sans-serif;color:var(--ink);background:linear-gradient(90deg,rgba(70,54,35,.06) 1px,transparent 1px),linear-gradient(rgba(70,54,35,.06) 1px,transparent 1px),#f8f5ef;background-size:36px 36px,36px 36px,auto}.page{width:min(1160px,calc(100% - 28px));margin:0 auto;padding:18px 0 30px}.hero{min-height:clamp(360px,56vh,520px);display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:22px;align-items:end;padding:34px;border-radius:12px;color:#fff;background:linear-gradient(90deg,rgba(14,10,7,.88),rgba(14,10,7,.45)),radial-gradient(circle at 80% 25%,rgba(244,201,120,.26),transparent 24rem),linear-gradient(135deg,#2a2119,#6d4a31 55%,#17120e);box-shadow:0 24px 70px rgba(22,17,13,.2)}.eyebrow{margin:0 0 12px;color:var(--gold);font-size:13px;font-weight:900;text-transform:uppercase}.hero h1{margin:0;font-size:clamp(54px,8vw,104px);line-height:.95;white-space:nowrap}.lead{margin:14px 0 0;color:rgba(255,255,255,.78);font-size:clamp(17px,2vw,23px);white-space:nowrap}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.button,.mini,.tab,.chip,.add,.qty button,.submit,.clear{border:0;border-radius:10px;font:inherit;font-weight:900;cursor:pointer}.button{min-height:50px;padding:0 20px}.primary{background:var(--gold);color:#21140b}.ghost{background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.24)}.status{padding:18px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(15,11,8,.5);backdrop-filter:blur(16px)}.status strong{display:block;margin-top:5px;font-size:32px}.status p{margin:6px 0 12px;color:rgba(255,255,255,.7)}.mini{min-height:36px;padding:0 12px;background:rgba(244,201,120,.18);color:#ffe7b6}.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:20px;align-items:start}.order-box,.menu-section{padding:18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.92)}.order-box{display:grid;grid-template-columns:160px minmax(0,1fr);gap:14px}.order-box h2,.menu-section h2,.cart h2{margin:0;font-size:24px}.group{display:grid;gap:10px}.head{display:flex;justify-content:space-between;gap:12px}.head strong{font-size:17px}.head span{color:var(--green);font-weight:900}.seat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.option-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.chip{min-height:44px;padding:0 10px;border:1px solid #d9d0c4;background:#fff;color:var(--ink)}.chip.active{background:var(--green);border-color:var(--green);color:#fff}.tabs{position:sticky;top:0;z-index:2;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0;padding:8px;border:1px solid var(--line);border-radius:12px;background:rgba(248,245,239,.96);backdrop-filter:blur(10px)}.tab{min-height:58px;padding:8px;background:#fff;text-align:left;border:1px solid transparent}.tab strong,.tab span{display:block}.tab span{margin-top:4px;color:var(--muted);font-size:12px}.tab.active{background:var(--dark);color:#fff}.tab.active span{color:rgba(255,255,255,.7)}.menu-section{display:none}.menu-section.active{display:block}.section-title{display:flex;align-items:end;justify-content:space-between;margin-bottom:14px}.section-title span{color:var(--muted);font-weight:900}.menu-list{display:grid;gap:9px}.item{display:grid;grid-template-columns:minmax(0,1fr) 90px 82px;gap:10px;align-items:center;min-height:66px;padding:10px;border:1px solid #eadfd1;border-radius:10px;background:#fff}.item strong{display:block;margin-top:5px;font-size:17px}.badge{display:inline-flex;min-height:22px;align-items:center;padding:0 8px;border-radius:999px;background:#e8f5ee;color:var(--green);font-size:12px;font-weight:900}.price{margin:0;text-align:right;color:#6d4429;font-weight:900}.add{min-height:42px;background:var(--dark);color:#fff}.cart{position:sticky;top:16px;padding:18px;border-radius:12px;background:var(--dark);color:#fff;box-shadow:0 20px 50px rgba(22,17,13,.18)}.cart-head,.cart-total,.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px}.clear{min-height:34px;padding:0 10px;background:rgba(255,255,255,.12);color:#fff}.cart-list{display:grid;gap:9px;min-height:96px;margin:16px 0}.empty,.help{margin:0;color:rgba(255,255,255,.62)}.cart-item{padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.08)}.cart-item span{display:block;margin-top:3px;color:rgba(255,255,255,.68);font-size:13px}.qty{display:grid;grid-template-columns:32px 28px 32px;gap:5px;text-align:center;align-items:center}.qty button{min-height:32px;background:#fff;color:var(--green)}.summary{display:grid;gap:7px;margin-bottom:14px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.07);font-size:13px;color:rgba(255,255,255,.75)}.cart-total{padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}.cart-total strong{font-size:28px}.submit{width:100%;min-height:52px;margin-top:14px;background:var(--gold);color:#21140b}.submit:disabled{opacity:.5;cursor:not-allowed}.toast{position:fixed;left:50%;bottom:20px;width:min(520px,calc(100% - 28px));padding:14px 16px;border-radius:12px;background:#132d22;color:#fff;transform:translate(-50%,22px);opacity:0;pointer-events:none;transition:.18s}.toast.error{background:#8c3219}.toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:980px){.hero,.layout{grid-template-columns:1fr}.cart{position:static}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.order-box{grid-template-columns:1fr}.seat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.option-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.hero h1,.lead{white-space:normal}}@media(max-width:620px){.page{width:min(100% - 20px,1160px);padding-top:10px}.hero{min-height:auto;padding:24px 18px}.hero h1{font-size:clamp(48px,18vw,72px)}.lead{font-size:16px}.actions{display:grid}.button{width:100%}.tabs{position:static;grid-template-columns:1fr}.order-box,.menu-section,.cart{padding:15px}.seat-grid,.option-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chip,.add,.submit{min-height:52px}.item{grid-template-columns:1fr}.price{text-align:left}.head{align-items:start;flex-direction:column}}
-</style>
+<link rel="stylesheet" href="/static/order.css">
+<script>
+window.ORDER_CATEGORIES = {{ categories | tojson }};
+window.ORDER_MENU = {{ menu | tojson }};
+</script>
+<script src="/static/order.js" defer></script>
 </head>
 <body>
 <main class="page">
@@ -15,40 +18,62 @@
       <p class="eyebrow">Cafe Order</p>
       <h1>자리 주문</h1>
       <p class="lead">메뉴 담기 · 자리/옵션 선택 · 주문 전송</p>
-      <div class="actions"><a class="button primary" href="#menu">주문하기</a><button class="button ghost" id="copy" type="button">주소 복사</button></div>
+      <div class="actions">
+        <a class="button primary" href="#menu-board">주문하기</a>
+        <button class="button ghost" id="copy-url" type="button">주소 복사</button>
+      </div>
     </div>
-    <aside class="status"><span>상태</span><strong>Online</strong><p>주문 가능</p><button class="mini" type="button" onclick="location.reload()">새로고침</button></aside>
+    <aside class="status">
+      <span>상태</span>
+      <strong>Online</strong>
+      <p>주문 가능</p>
+      <button class="mini" type="button" onclick="location.reload()">새로고침</button>
+    </aside>
   </section>
-  <section class="layout" id="menu">
-    <div>
+
+  <section class="layout" id="menu-board">
+    <div class="menu-area">
       <section class="order-box">
-        <div><p class="eyebrow">Order</p><h2>자리·옵션</h2></div>
-        <div class="group"><div class="head"><strong>자리</strong><span id="seatLabel">선택 안 함</span></div><div class="seat-grid" id="seats"></div></div>
-        <div></div>
-        <div class="group"><div class="head"><strong>옵션</strong><span id="optionLabel">기본</span></div><div class="option-grid" id="options"></div></div>
+        <div class="order-title">
+          <p class="eyebrow">Order</p>
+          <h2>자리·옵션</h2>
+        </div>
+        <div class="group">
+          <div class="head"><strong>자리</strong><span id="seat-label">선택 안 함</span></div>
+          <div class="seat-grid" id="seat-grid"></div>
+        </div>
+        <div class="group">
+          <div class="head"><strong>옵션</strong><span id="option-label">기본</span></div>
+          <div class="option-grid" id="option-grid"></div>
+        </div>
       </section>
-      <nav class="tabs" id="tabs"></nav>
-      <section class="menu-section active"><div class="section-title"><div><p class="eyebrow" id="catHint"></p><h2 id="catTitle"></h2></div><span id="catCount"></span></div><div class="menu-list" id="menuList"></div></section>
+
+      <nav class="tabs" id="category-tabs"></nav>
+      <section class="menu-section active">
+        <div class="section-title">
+          <div><p class="eyebrow" id="category-hint"></p><h2 id="category-title"></h2></div>
+          <span id="category-count"></span>
+        </div>
+        <div class="menu-list" id="menu-list"></div>
+      </section>
     </div>
-    <aside class="cart"><div class="cart-head"><div><p class="eyebrow">Cart</p><h2>장바구니</h2></div><button class="clear" id="clear" type="button">비우기</button></div><div class="cart-list" id="cartList"><p class="empty">메뉴를 담아 주세요.</p></div><div class="summary"><span id="cartSeat">자리: 선택 안 함</span><span id="cartOptions">옵션: 기본</span></div><div class="cart-total"><span>합계</span><strong id="total">0원</strong></div><button class="submit" id="submit" type="button" disabled>주문 보내기</button><p class="help">여러 메뉴를 한 번에 보낼 수 있습니다.</p></aside>
+
+    <aside class="cart">
+      <div class="cart-head">
+        <div><p class="eyebrow">Cart</p><h2>장바구니</h2></div>
+        <button class="clear" id="clear-cart" type="button">비우기</button>
+      </div>
+      <div class="cart-list" id="cart-list"><p class="empty">메뉴를 담아 주세요.</p></div>
+      <div class="summary">
+        <span id="cart-seat">자리: 선택 안 함</span>
+        <span id="cart-options">옵션: 기본</span>
+      </div>
+      <div class="cart-total"><span>합계</span><strong id="cart-total">0원</strong></div>
+      <button class="submit" id="submit-order" type="button" disabled>주문 보내기</button>
+      <p class="help">번호판·주방·분석에 함께 저장됩니다.</p>
+    </aside>
   </section>
 </main>
-<div class="toast" id="toast"></div>
-<script>
-const categories=[{id:'coffee',name:'커피',hint:'아메리카노, 라떼'},{id:'noncoffee',name:'논커피',hint:'초콜릿, 버블티'},{id:'blended',name:'블렌디드',hint:'스무디, 쉐이크'},{id:'ade',name:'에이드·주스',hint:'과일 음료'},{id:'tea',name:'티',hint:'허브티, 밀크티'}];
-const menu=[['americano','coffee','아메리카노',3200,'기본'],['cafe-latte','coffee','카페라떼',4200,'인기'],['vanilla-latte','coffee','바닐라라떼',4500,'달콤'],['coldbrew','coffee','콜드브루',4200,'ICE'],['cafe-mocha','coffee','카페모카',4500,'초코'],['signature-latte','coffee','시그니처 라떼',4700,'추천'],['chocolate','noncoffee','초콜릿',4200,'초코'],['dalgona-latte','noncoffee','달고나라떼',4200,'달고나'],['matcha-latte','noncoffee','말차라떼',4500,'녹차'],['toffee-latte','noncoffee','토피넛라떼',4500,'고소'],['bubble-black-sugar','noncoffee','버블 흑당라떼',5100,'버블'],['fruit-flatccino','blended','과일 플랫치노',3900,'ICE'],['milkshake','blended','밀크쉐이크',4900,'쉐이크'],['choco-cookie-shake','blended','초코쿠키쉐이크',5100,'쿠키'],['cleanse-juice','ade','클렌즈주스',4200,'주스'],['fruit-ade','ade','과일 에이드',4700,'탄산'],['strawberry-juice','ade','딸기주스',4900,'과일'],['chamomile','tea','캐모마일',3200,'허브'],['earl-grey','tea','얼그레이',3200,'홍차'],['iced-tea','tea','아이스티',3200,'ICE'],['royal-milk-tea','tea','로열밀크티',4900,'밀크티']].map(([id,category,name,price,badge])=>({id,category,name,price,badge}));
-const seats=['창가 1번','창가 2번','테이블 1번','테이블 2번','테이블 3번','테이크아웃'];
-const opts=['얼음 적게','얼음 많이','얼음 없이','연하게','샷 추가','시럽 추가','덜 달게','빨대 필요','캐리어 필요','따뜻하게'];
-const cart=new Map();const state={cat:'coffee',seat:'',opts:new Set()};const $=s=>document.querySelector(s);const won=n=>Number(n).toLocaleString('ko-KR')+'원';
-function toast(msg,bad=false){const t=$('#toast');t.textContent=msg;t.className='toast show'+(bad?' error':'');setTimeout(()=>t.className='toast',2600)}
-function renderChoices(){ $('#seatLabel').textContent=state.seat||'선택 안 함'; const opt=[...state.opts].join(', ')||'기본'; $('#optionLabel').textContent=opt; $('#cartSeat').textContent='자리: '+(state.seat||'선택 안 함'); $('#cartOptions').textContent='옵션: '+opt; }
-function renderMenu(){const cat=categories.find(c=>c.id===state.cat);$('#catTitle').textContent=cat.name;$('#catHint').textContent=cat.hint;const items=menu.filter(m=>m.category===state.cat);$('#catCount').textContent=items.length+' items';$('#menuList').innerHTML=items.map(m=>`<article class="item"><div><span class="badge">${m.badge}</span><strong>${m.name}</strong></div><p class="price">${won(m.price)}</p><button class="add" data-id="${m.id}" type="button">담기</button></article>`).join('')}
-function renderCart(){let count=0,total=0;cart.forEach(i=>{count+=i.qty;total+=i.price*i.qty});$('#total').textContent=won(total);$('#submit').disabled=!count;if(!count){$('#cartList').innerHTML='<p class="empty">메뉴를 담아 주세요.</p>';return}$('#cartList').innerHTML=[...cart.values()].map(i=>`<div class="cart-item"><div><strong>${i.name}</strong><span>${won(i.price)} x ${i.qty}</span></div><div class="qty"><button data-act="minus" data-id="${i.id}" type="button">-</button><span>${i.qty}</span><button data-act="plus" data-id="${i.id}" type="button">+</button></div></div>`).join('')}
-function add(id){const m=menu.find(x=>x.id===id);const old=cart.get(id);old?old.qty++:cart.set(id,{...m,qty:1});renderCart();toast(m.name+' 담았습니다')}
-function setup(){ $('#tabs').innerHTML=categories.map(c=>`<button class="tab ${c.id===state.cat?'active':''}" data-cat="${c.id}" type="button"><strong>${c.name}</strong><span>${c.hint}</span></button>`).join(''); $('#seats').innerHTML=seats.map(s=>`<button class="chip seat" data-seat="${s}" type="button">${s}</button>`).join(''); $('#options').innerHTML=opts.map(o=>`<button class="chip opt" data-opt="${o}" type="button">${o}</button>`).join(''); renderMenu(); renderChoices(); renderCart(); }
-document.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.cat){state.cat=b.dataset.cat;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));renderMenu()}if(b.dataset.seat){state.seat=b.dataset.seat;document.querySelectorAll('.seat').forEach(x=>x.classList.toggle('active',x===b));renderChoices()}if(b.dataset.opt){state.opts.has(b.dataset.opt)?state.opts.delete(b.dataset.opt):state.opts.add(b.dataset.opt);b.classList.toggle('active');renderChoices()}if(b.classList.contains('add'))add(b.dataset.id);if(b.dataset.act){const i=cart.get(b.dataset.id);if(i){i.qty+=b.dataset.act==='plus'?1:-1;if(i.qty<=0)cart.delete(i.id);renderCart()}}});
-$('#clear').onclick=()=>{cart.clear();renderCart()};$('#copy').onclick=async()=>{await navigator.clipboard.writeText(location.href);toast('주소 복사 완료')};$('#submit').onclick=async()=>{const items=[...cart.values()].map(i=>({name:i.name,qty:i.qty,unit_price:i.price,options:[...state.opts].join(', ')||''}));try{const r=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({table_no:state.seat||'미선택',items})});const d=await r.json();if(!r.ok)throw new Error(d.detail||'주문 실패');cart.clear();renderCart();toast('주문 완료 #'+d.order_no)}catch(err){toast(err.message,true)}};
-setup();
-</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
