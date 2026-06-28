@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cafe-os 분석 대시보드</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#f4f4f5;color:#18181b;padding:20px 24px;
+    font-family:"Pretendard","Malgun Gothic",sans-serif;}
+  h1{font-size:24px;margin-bottom:2px;}
+  .sub{color:#71717a;font-size:13px;margin-bottom:20px;}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+  .kpi{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+  .kpi .label{font-size:13px;color:#71717a;}
+  .kpi .value{font-size:28px;font-weight:800;margin-top:6px;}
+  .kpi.blue .value{color:#2563eb;} .kpi.green .value{color:#16a34a;}
+  .kpi.orange .value{color:#ea580c;} .kpi.purple .value{color:#7c3aed;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .panel{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+  .panel.wide{grid-column:1/3;}
+  .panel h2{font-size:15px;margin-bottom:14px;}
+  canvas{max-height:300px;}
+  .top-list{list-style:none;}
+  .top-list li{display:flex;justify-content:space-between;padding:7px 0;
+    border-bottom:1px solid #f0f0f0;font-size:14px;}
+  .top-list .rank{color:#a1a1aa;width:24px;}
+  .top-list .qty{font-weight:700;color:#2563eb;}
+  .loading{color:#a1a1aa;padding:30px;text-align:center;}
+</style>
+</head>
+<body>
+  <h1>📊 cafe-os 분석 대시보드</h1>
+  <div class="sub" id="sub">불러오는 중...</div>
+
+  <!-- 오늘 KPI -->
+  <div class="cards">
+    <div class="kpi blue"><div class="label">오늘 주문</div><div class="value" id="k_orders">-</div></div>
+    <div class="kpi green"><div class="label">오늘 매출</div><div class="value" id="k_sales">-</div></div>
+    <div class="kpi orange"><div class="label">객단가</div><div class="value" id="k_avg">-</div></div>
+    <div class="kpi purple"><div class="label">피크 시간</div><div class="value" id="k_peak">-</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel wide">
+      <h2>⏰ 당일 시간대별 주문량</h2>
+      <canvas id="c_hourly"></canvas>
+    </div>
+    <div class="panel">
+      <h2>🏆 오늘 인기 메뉴 TOP5</h2>
+      <ul class="top-list" id="top_menus"><li class="loading">불러오는 중...</li></ul>
+    </div>
+    <div class="panel">
+      <h2>📅 요일별 평균 매출</h2>
+      <canvas id="c_weekday"></canvas>
+    </div>
+    <div class="panel">
+      <h2>🌤️ 날씨별 일평균 주문수</h2>
+      <canvas id="c_weather"></canvas>
+    </div>
+    <div class="panel">
+      <h2>📈 월별 매출 추이</h2>
+      <canvas id="c_monthly"></canvas>
+    </div>
+  </div>
+
+<script>
+const won = n => n.toLocaleString("ko-KR")+"원";
+const WEATHER_KR = {Clear:"맑음",Clouds:"흐림",Rain:"비",Snow:"눈"};
+let charts = {};
+
+function draw(id, cfg){
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+
+async function load(){
+  const d = await (await fetch("/api/analytics?token="+TOKEN)).json();
+
+  // KPI
+  const s = d.summary;
+  document.getElementById("k_orders").textContent = s.orders+"건";
+  document.getElementById("k_sales").textContent = won(s.sales);
+  document.getElementById("k_avg").textContent = won(s.avg_ticket);
+  const peak = d.hour_avg.reduce((a,b)=>b.avg_orders>a.avg_orders?b:a, d.hour_avg[0]||{hour:"-"});
+  document.getElementById("k_peak").textContent = (peak.hour??"-")+"시";
+  document.getElementById("sub").textContent = s.date + " 기준 · 자동 갱신";
+
+  // 인기 메뉴
+  document.getElementById("top_menus").innerHTML = s.top_menus.length
+    ? s.top_menus.map((m,i)=>`<li><span><span class="rank">${i+1}</span>${m.name}</span><span class="qty">${m.qty}잔</span></li>`).join("")
+    : '<li class="loading">오늘 주문 없음</li>';
+
+  // 시간대별 (오늘)
+  const h = d.hourly;
+  draw("c_hourly", {
+    type:"bar",
+    data:{labels:h.hours.map(x=>x+"시"),
+      datasets:[{label:"주문 수량",data:h.hour_total,
+        backgroundColor:"#3b82f6",borderRadius:6}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+  });
+
+  // 요일별
+  draw("c_weekday", {
+    type:"bar",
+    data:{labels:d.weekday.map(x=>x.label),
+      datasets:[{label:"평균 매출",data:d.weekday.map(x=>x.avg_sales),
+        backgroundColor:d.weekday.map(x=>x.weekday>=5?"#f59e0b":"#60a5fa"),borderRadius:6}]},
+    options:{plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>won(c.parsed.y)}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>(v/10000)+"만"}}}}
+  });
+
+  // 날씨별
+  draw("c_weather", {
+    type:"bar", 
+    data:{labels:d.weather.map(x=>WEATHER_KR[x.weather]||x.weather),
+      datasets:[{label:"일평균 주문",data:d.weather.map(x=>x.avg_orders),
+        backgroundColor:["#fbbf24","#94a3b8","#3b82f6","#cbd5e1"],borderRadius:6}]},
+    options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
+  });
+
+  // 월별
+  draw("c_monthly", {
+    type:"line",
+    data:{labels:d.monthly.map(x=>x.ym.slice(2)),
+      datasets:[{label:"매출",data:d.monthly.map(x=>x.sales),
+        borderColor:"#16a34a",backgroundColor:"rgba(22,163,74,.1)",
+        fill:true,tension:.3}]},
+    options:{plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>won(c.parsed.y)}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>(v/10000)+"만"}}}}
+  });
+}
+
+const TOKEN = new URLSearchParams(location.search).get("token") || "";
+load();
+setInterval(load, 60000); // 1분마다 갱신
+</script>
+</body>
+</html>
