@@ -1,1 +1,124 @@
-<html><body>kitchen page</body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주방 관리</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#f4f4f5;color:#18181b;padding:18px 22px;
+    font-family:"Pretendard","Malgun Gothic",sans-serif;}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  header h1{font-size:22px;font-weight:800;}
+  header .meta{font-size:13px;color:#71717a;text-align:right;}
+  .lane-title{font-size:14px;font-weight:700;color:#52525b;margin:6px 0 10px;
+    display:flex;align-items:center;gap:8px;}
+  .lane-title .cnt{background:#e4e4e7;border-radius:999px;padding:1px 9px;font-size:12px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:12px;margin-bottom:24px;}
+  .card{background:#fff;border-radius:14px;padding:14px 16px;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:5px solid #d4d4d8;}
+  .card.waiting{border-left-color:#f59e0b;}
+  .card.done{border-left-color:#16a34a;}
+  .row1{display:flex;justify-content:space-between;align-items:baseline;}
+  .no{font-size:30px;font-weight:800;line-height:1;}
+  .table{font-size:13px;color:#71717a;}
+  .menu{margin:9px 0;font-size:14px;line-height:1.5;color:#27272a;
+    min-height:21px;word-break:keep-all;}
+  .time{font-size:12px;color:#a1a1aa;margin-bottom:11px;}
+  .total{font-weight:700;}
+  button{width:100%;border:none;border-radius:10px;padding:11px;
+    font-size:15px;font-weight:700;color:#fff;cursor:pointer;}
+  button:active{transform:translateY(1px);}
+  .btn-done{background:#16a34a;}
+  .btn-pick{background:#2563eb;}
+  .empty{color:#a1a1aa;font-size:14px;padding:8px 2px 20px;}
+  .err{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;
+    border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:14px;display:none;}
+  .toolbar{display:flex;gap:8px;align-items:center;}
+  .toolbar a{font-size:13px;color:#2563eb;text-decoration:none;}
+  .dot-live{width:8px;height:8px;border-radius:50%;background:#22c55e;
+    display:inline-block;animation:blink 1.4s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+</style>
+</head>
+<body>
+  <header>
+    <h1>👩‍🍳 주방 관리</h1>
+    <div class="meta">
+      <div class="toolbar">
+        <span class="dot-live"></span>
+        <span id="sub">불러오는 중…</span>
+        <a id="dash" href="#">📊 대시보드</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="err" id="err"></div>
+
+  <div class="lane-title">🟠 준비중 <span class="cnt" id="cnt_w">0</span></div>
+  <div class="grid" id="lane_waiting"><div class="empty">접수된 주문이 없습니다</div></div>
+
+  <div class="lane-title">🟢 제조완료 (픽업 대기) <span class="cnt" id="cnt_d">0</span></div>
+  <div class="grid" id="lane_done"><div class="empty">완료 후 픽업 대기 중인 주문이 없습니다</div></div>
+
+<script>
+const TOKEN = new URLSearchParams(location.search).get("token") || "";
+document.getElementById("dash").href = "/dashboard?token=" + encodeURIComponent(TOKEN);
+
+function showErr(msg){
+  const e = document.getElementById("err");
+  e.textContent = msg; e.style.display = "block";
+}
+
+function card(o){
+  const cls = o.status;
+  const btn = o.status === "waiting"
+    ? `<button class="btn-done" onclick="act(${o.order_no},'done',this)">제조완료 ▶</button>`
+    : `<button class="btn-pick" onclick="act(${o.order_no},'pick',this)">픽업완료 ✔</button>`;
+  const tableTxt = o.table_no ? `테이블 ${o.table_no}` : "";
+  const timeTxt = (o.ordered_at || "").slice(11,16);
+  return `<div class="card ${cls}">
+    <div class="row1"><span class="no">${o.order_no}</span><span class="table">${tableTxt}</span></div>
+    <div class="menu">${o.menu || "—"}</div>
+    <div class="time">접수 ${timeTxt} · <span class="total">${o.total || ""}</span></div>
+    ${btn}
+  </div>`;
+}
+
+async function act(no, kind, el){
+  el.disabled = true; el.textContent = "처리중…";
+  try{
+    const r = await fetch(`/api/orders/${no}/${kind}?token=${encodeURIComponent(TOKEN)}`, {method:"POST"});
+    if(r.status === 403){ showErr("관리자 토큰이 올바르지 않습니다. 주소의 ?token= 값을 확인하세요."); el.disabled=false; return; }
+    if(!r.ok){ showErr("처리 실패 ("+r.status+")"); el.disabled=false; return; }
+    await load();   // 즉시 갱신
+  }catch(e){ showErr("네트워크 오류"); el.disabled=false; }
+}
+
+async function load(){
+  try{
+    const board = await (await fetch("/api/orders")).json();
+    const waiting = board.filter(o=>o.status==="waiting").sort((a,b)=>a.order_no-b.order_no);
+    const done    = board.filter(o=>o.status==="done").sort((a,b)=>a.order_no-b.order_no);
+
+    document.getElementById("cnt_w").textContent = waiting.length;
+    document.getElementById("cnt_d").textContent = done.length;
+    document.getElementById("lane_waiting").innerHTML =
+      waiting.length ? waiting.map(card).join("") : '<div class="empty">접수된 주문이 없습니다</div>';
+    document.getElementById("lane_done").innerHTML =
+      done.length ? done.map(card).join("") : '<div class="empty">완료 후 픽업 대기 중인 주문이 없습니다</div>';
+
+    const now = new Date();
+    document.getElementById("sub").textContent =
+      `자동 갱신 · ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+    document.getElementById("err").style.display = "none";
+  }catch(e){
+    showErr("주문 목록을 불러오지 못했습니다");
+  }
+}
+load();
+setInterval(load, 5000);  // 5초마다 갱신
+</script>
+</body>
+</html>
